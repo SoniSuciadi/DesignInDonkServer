@@ -1,0 +1,20 @@
+[
+  {
+    "username": "SoniSuciadi",
+    "fullName": "Soni Suciadi",
+    "email": "sonysuciadi@gmail.com",
+    "password": "03082000",
+    "imgUrl": "",
+    "phoneNumber": "08117858100",
+    "statusAccount": "Active"
+  },
+  {
+    "username": "RicoDTA",
+    "fullName": "Rico Dwi Putra Taslim",
+    "email": "ricorico@gmail.com",
+    "imgUrl": "",
+    "password": "12345",
+    "phoneNumber": "091231293219",
+    "statusAccount": "Active"
+  }
+]
