@@ -19,10 +19,10 @@ function sendEmailConfirm(email, jwt, action = "activation") {
   if (action == "activation") {
     text = "Activation Account";
     // link = `http://localhost:3000/user/confirm?token=${jwt}`;
-    link = `http://localhost:8080/confirm?token=${jwt}`;
+    link = `https://design-in-donk.web.app/confirm?token=${jwt}`;
   } else if (action == "forgot") {
     text = "Forgot Password";
-    link = `http://localhost:8080/changepassword?token=${jwt}`;
+    link = `https://design-in-donk.web.app/changepassword?token=${jwt}`;
   }
 
   const mailOptions = {

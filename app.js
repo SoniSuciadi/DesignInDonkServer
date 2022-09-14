@@ -20,7 +20,8 @@ app.use(handleError);
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:8080",
+    // origin: "http://localhost:8080",
+    origin: "https://design-in-donk.web.app",
     methods: ["GET", "POST"],
   },
 });
