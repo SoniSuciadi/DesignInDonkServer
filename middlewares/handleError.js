@@ -8,6 +8,10 @@ function handleError(err, req, res, next) {
       status = 401;
       msg = "Invalid Email or Password";
       break;
+    case "Account not Active":
+      status = 403;
+      msg = "Check you email for activation accont";
+      break;
     case "ValidationError":
       status = 400;
       msg = "Invalid input form";

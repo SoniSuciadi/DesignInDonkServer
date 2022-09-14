@@ -5,6 +5,7 @@ const mUser = require("../models/user");
 let autentikasi = async (req, res, next) => {
   try {
     const { access_token } = req.headers;
+
     let payload = verifyJwt(access_token);
     let selectedUser = await mUser
       .findOne({
@@ -19,9 +20,9 @@ let autentikasi = async (req, res, next) => {
       fullName: selectedUser.fullName,
       email: selectedUser.email,
     };
+
     next();
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

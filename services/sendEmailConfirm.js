@@ -18,7 +18,8 @@ function sendEmailConfirm(email, jwt, action = "activation") {
   let text;
   if (action == "activation") {
     text = "Activation Account";
-    link = `http://localhost:3000/user/confirm?token=${jwt}`;
+    // link = `http://localhost:3000/user/confirm?token=${jwt}`;
+    link = `http://localhost:8080/confirm?token=${jwt}`;
   } else if (action == "forgot") {
     text = "Forgot Password";
     link = `http://localhost:8080/changepassword?token=${jwt}`;

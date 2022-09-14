@@ -7,12 +7,22 @@ const { response } = require("express");
 class RoomChats {
   static async sendMessage(req, res, next) {
     try {
+      console.log(req.file);
       const { id: userId } = req.user;
       const { id, pesan } = req.body;
+      let imgUrl = "";
+      if (req.file) {
+        imgUrl = req.file.imgUrl;
+      }
       if (!id) {
         throw { name: "bad request" };
       }
-      let msg = new Chat({ sender: userId, message: pesan });
+      let msg = new Chat({
+        sender: userId,
+        message: pesan,
+        imgUrl: imgUrl,
+        createdAt: new Date(),
+      });
 
       let room = await mRoomChat.find({
         member: {
@@ -73,8 +83,57 @@ class RoomChats {
       });
       res.status(200).json(room);
     } catch (error) {
-      console.log(error);
       next(error);
+    }
+  }
+  static async getRoomChat(req, res, next) {
+    try {
+      const { id: userId } = req.user;
+      let { id } = req.params;
+      let room = await mRoomChat.find({
+        member: {
+          $elemMatch: { _id: ObjectId(id) },
+        },
+      });
+
+      let getSelectRoom = room.find((el) => {
+        let ketemu = el.member.find((element) => {
+          return element._id.toString() === userId;
+        });
+        if (ketemu) {
+          return el;
+        }
+      });
+      if (!getSelectRoom) {
+        throw { name: "Data not found" };
+      }
+
+      let tempUser = getSelectRoom.member.map((el) => {
+        return mUser
+          .findById({ _id: el._id }, { fullName: 1, imgUrl: 1 })
+          .exec();
+      });
+      let person = "";
+      await Promise.allSettled(tempUser).then((response) => {
+        let hasil = response.map((el) => {
+          if (el.value._id != userId) {
+            getSelectRoom.member = el.value;
+            person = el.value.fullName;
+          }
+          return el.value;
+        });
+        room.member = hasil;
+      });
+      getSelectRoom.messages.forEach((el) => {
+        if (el.sender == userId) {
+          el.sender = "anda";
+        } else {
+          el.sender = person;
+        }
+      });
+      res.status(200).json(getSelectRoom);
+    } catch (err) {
+      next(err);
     }
   }
   static async getAllChat(req, res, next) {
@@ -82,8 +141,8 @@ class RoomChats {
       const { id: userId } = req.user;
       let allRoom = await mRoomChat.find(
         {
-          $filter: {
-            member: [{ _id: ObjectId(userId) }],
+          member: {
+            $elemMatch: { _id: ObjectId(userId) },
           },
         },
         { member: 1 }
@@ -95,17 +154,24 @@ class RoomChats {
           mUser.findById(el.member[1]._id, { fullName: 1, imgUrl: 1 }).exec(),
         ]);
       });
-      let resolve = [];
+      let allMember = [];
       member.forEach((el) => {
-        Promise.allSettled(el).then((res) => {
-          resolve.push(res);
-          console.log(resolve);
-        });
+        allMember.push(...el);
       });
-      console.log(resolve, "----------");
+      let memberResolve = [];
+      await Promise.allSettled(allMember).then((res) => {
+        memberResolve.push(...res);
+      });
+      allRoom.forEach((el, i) => {
+        if (memberResolve[i * 2].value.id !== userId) {
+          el.member = memberResolve[i * 2].value;
+        } else {
+          el.member = memberResolve[i * 2 + 1].value;
+        }
+      });
+
       res.status(200).json(allRoom);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

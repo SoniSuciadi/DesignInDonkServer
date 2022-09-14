@@ -1,3 +1,4 @@
+const { config } = require("dotenv");
 var admin = require("firebase-admin");
 
 const BUCKET = "designindonk-6a56a.appspot.com";
@@ -22,10 +23,11 @@ admin.initializeApp({
 
 const bucket = admin.storage().bucket();
 const uploadImage = (req, res, next) => {
+  console.log("sdasdasdasdadsd");
   if (!req.file) {
     return next();
   }
-  console.log(req.file);
+  console.log(req.file, "------------");
   const image = req.file;
   const imageName = Date.now() + "--" + image.originalname.split(" ").join("");
   const file = bucket.file(imageName);

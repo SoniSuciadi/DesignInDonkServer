@@ -25,7 +25,7 @@ let seed = async () => {
         }).save();
         console.log(newPost);
         await mUser.updateOne(
-          { id: userCreate },
+          { _id: new ObjectId(userCreate) },
           {
             $push: { post: newPost.id },
           }

@@ -58,7 +58,6 @@ class Post {
     try {
       let { title, description, category, subCategory } = req.body;
       let { imgUrl } = req.file;
-      console.log(req.file, "----------");
       let newPost = await new mPost({
         title,
         description,
@@ -137,7 +136,6 @@ class Post {
         selectedUser,
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }

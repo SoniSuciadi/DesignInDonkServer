@@ -26,6 +26,10 @@ class User {
       if (!comparePassword(password, selectedUser.password)) {
         throw { name: "Invalid credential" };
       }
+      if (selectedUser.statusAccount != "Active") {
+        sendEmailConfirm(email, generateJWT(selectedUser));
+        throw { name: "Account not Active" };
+      }
       res.status(200).json({
         statusCode: 200,
         msg: "Success Login",
@@ -73,14 +77,12 @@ class User {
         });
       }
     } catch (err) {
-      console.log(err);
       next(err);
     }
   }
   static async registerUser(req, res, next) {
     try {
       const { fullName, email, password } = req.body;
-      console.log(fullName, email, password);
       if (fullName == "" || email == "" || password == "") {
         throw { name: "Failed register" };
       }
@@ -116,13 +118,13 @@ class User {
         throw { name: "Unauthorized" };
       }
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
   static async activationAccount(req, res, next) {
     try {
       let { token } = req.query;
+      console.log(token);
       let payload = verifyJwt(token);
       let user = await mUser.findById(payload.id);
       if (!user) {
@@ -142,7 +144,6 @@ class User {
     }
   }
   static async updateUserData(req, res, next) {
-    console.log(req.file);
     try {
       let { fullName, phoneNumber } = req.body;
       let { id } = req.user;

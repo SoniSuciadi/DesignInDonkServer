@@ -25,6 +25,10 @@ const mPost = mongoose.model("Posts", {
     type: String,
     required: "userCreate is required",
   },
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
 });
 
 module.exports = mPost;
