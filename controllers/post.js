@@ -101,6 +101,7 @@ class Post {
           imgUrl: post.imgUrl,
           category: post.category,
           subCategory: post.subCategory,
+          createdAt: post.createdAt,
           IduserCreate: userCreate.id,
           fullNameuserCreate: userCreate.fullName,
           ImguserCreate: userCreate.imgUrl,

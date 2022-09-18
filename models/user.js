@@ -26,7 +26,8 @@ const userSchema = new mongoose.Schema({
   },
   imgUrl: {
     type: String,
-    default: "",
+    default:
+      "https://firebasestorage.googleapis.com/v0/b/designindonk-6a56a.appspot.com/o/1663252160397--%C3%A2%C2%80%C2%94Pngtree%C3%A2%C2%80%C2%943drenderingmaleavatarbusinessman_7497905.png?alt=media&token=60983ee6-74cb-4680-a04a-d0b4d286690f",
   },
   favorite: {
     type: Array,
